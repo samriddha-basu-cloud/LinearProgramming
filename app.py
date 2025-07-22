@@ -9,219 +9,579 @@ from datetime import datetime
 st.set_page_config(page_title="🧮 LP Solver 3D++", layout="wide")
 
 # ---------- Enhanced Styling with Gradients ---------- #
+# Replace the existing st.markdown CSS section with this professional glassmorphic design
+
 st.markdown("""
     <style>
-        /* Main background with gradient */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+        /* CSS Variables for Theme Support */
+        :root {
+            --bg-primary: #f8fafc;
+            --bg-secondary: #e2e8f0;
+            --glass-bg: rgba(255, 255, 255, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.3);
+            --glass-shadow: rgba(0, 0, 0, 0.05);
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --text-muted: #64748b;
+            --accent-primary: #3b82f6;
+            --accent-secondary: #8b5cf6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --surface-hover: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Dark theme variables */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-primary: #0f172a;
+                --bg-secondary: #1e293b;
+                --glass-bg: rgba(15, 23, 42, 0.6);
+                --glass-border: rgba(255, 255, 255, 0.1);
+                --glass-shadow: rgba(0, 0, 0, 0.3);
+                --text-primary: #f1f5f9;
+                --text-secondary: #cbd5e1;
+                --text-muted: #94a3b8;
+                --accent-primary: #60a5fa;
+                --accent-secondary: #a78bfa;
+                --success: #34d399;
+                --warning: #fbbf24;
+                --error: #f87171;
+                --surface-hover: rgba(15, 23, 42, 0.8);
+            }
+        }
+
+        /* Force dark theme support for Streamlit */
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --glass-bg: rgba(15, 23, 42, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-shadow: rgba(0, 0, 0, 0.3);
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --accent-primary: #60a5fa;
+            --accent-secondary: #a78bfa;
+            --success: #34d399;
+            --warning: #fbbf24;
+            --error: #f87171;
+            --surface-hover: rgba(15, 23, 42, 0.8);
+        }
+
+        /* Global font and base styling */
+        html, body, [class*="css"] {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--text-primary);
+        }
+
+        /* Main background with professional gradient */
         .main {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
             min-height: 100vh;
+            position: relative;
         }
 
-        /* Sidebar styling */
-        .css-1d391kg {
-            background: linear-gradient(180deg, #2D1B69 0%, #11998e 100%);
-        }
-
-        /* Main content area */
-        .block-container {
-            padding-top: 2rem;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            margin: 1rem;
-            backdrop-filter: blur(10px);
-        }
-
-        /* Enhanced button styling */
-        div.stButton > button:first-child {
-            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
-            color: white;
-            border: none;
-            border-radius: 25px;
-            font-weight: bold;
-            font-size: 16px;
-            padding: 15px 30px;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        /* Professional background pattern */
+        .main::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 25% 25%, var(--accent-primary)08 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, var(--accent-secondary)08 0%, transparent 50%),
+                linear-gradient(135deg, transparent 25%, var(--glass-shadow) 25%, var(--glass-shadow) 50%, transparent 50%);
+            background-size: 100px 100px, 100px 100px, 40px 40px;
+            opacity: 0.3;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Professional sidebar design */
+        .css-1d391kg {
+            background: var(--glass-bg) !important;
+            backdrop-filter: blur(24px) saturate(180%) !important;
+            border-right: 1px solid var(--glass-border) !important;
+            box-shadow: 
+                4px 0 24px var(--glass-shadow),
+                inset -1px 0 0 var(--glass-border) !important;
+        }
+
+        /* Main content container */
+        .block-container {
+            background: var(--glass-bg) !important;
+            backdrop-filter: blur(32px) saturate(180%) !important;
+            border-radius: 16px !important;
+            border: 1px solid var(--glass-border) !important;
+            box-shadow: 
+                0 24px 48px var(--glass-shadow),
+                inset 0 1px 0 var(--glass-border) !important;
+            margin: 1rem !important;
+            padding: 2rem !important;
+        }
+
+        /* Professional button styling */
+        div.stButton > button:first-child {
+            background: var(--glass-bg) !important;
+            backdrop-filter: blur(20px) saturate(180%) !important;
+            border: 1px solid var(--glass-border) !important;
+            border-radius: 12px !important;
+            color: var(--text-primary) !important;
+            font-weight: 600 !important;
+            font-size: 14px !important;
+            padding: 12px 24px !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            box-shadow: 
+                0 4px 12px var(--glass-shadow),
+                inset 0 1px 0 var(--glass-border) !important;
+            width: 100% !important;
+            letter-spacing: 0.025em !important;
+            text-transform: none !important;
+            position: relative !important;
+            overflow: hidden !important;
+        }
+
+        div.stButton > button:first-child::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, var(--glass-border), transparent);
+            transition: left 0.6s ease;
         }
 
         div.stButton > button:first-child:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
-            background: linear-gradient(45deg, #4ECDC4, #FF6B6B);
+            transform: translateY(-1px) !important;
+            background: var(--surface-hover) !important;
+            border-color: var(--accent-primary)40 !important;
+            box-shadow: 
+                0 8px 24px var(--glass-shadow),
+                0 0 0 1px var(--accent-primary)20,
+                inset 0 1px 0 var(--glass-border) !important;
+            color: var(--accent-primary) !important;
         }
 
-        /* Download button styling */
+        div.stButton > button:first-child:hover::before {
+            left: 100%;
+        }
+
+        div.stButton > button:first-child:active {
+            transform: translateY(0) scale(0.98) !important;
+        }
+
+        /* Professional download button */
         div.stDownloadButton > button {
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            border-radius: 20px;
-            font-weight: bold;
-            padding: 12px 25px;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            background: var(--accent-primary)15 !important;
+            backdrop-filter: blur(20px) saturate(180%) !important;
+            border: 1px solid var(--accent-primary)30 !important;
+            border-radius: 10px !important;
+            color: var(--accent-primary) !important;
+            font-weight: 600 !important;
+            padding: 10px 20px !important;
+            transition: all 0.3s ease !important;
+            box-shadow: 
+                0 4px 12px var(--accent-primary)10,
+                inset 0 1px 0 var(--accent-primary)20 !important;
         }
 
         div.stDownloadButton > button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.6);
-        }
-
-        /* Input field styling */
-        .stTextInput > div > div > input {
-            background: rgba(255, 255, 255, 0.9);
-            border: 2px solid transparent;
-            border-radius: 15px;
-            padding: 12px 16px;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .stTextInput > div > div > input:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-            background: white;
-        }
-
-        /* Number input styling */
-        .stNumberInput > div > div > input {
-            background: rgba(255, 255, 255, 0.9);
-            border: 2px solid transparent;
-            border-radius: 12px;
-            padding: 10px 14px;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .stNumberInput > div > div > input:focus {
-            border-color: #4ECDC4;
-            box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.1);
-        }
-
-        /* Select box styling */
-        .stSelectbox > div > div > select {
-            background: rgba(255, 255, 255, 0.9);
-            border: 2px solid transparent;
-            border-radius: 12px;
-            padding: 10px 14px;
-            transition: all 0.3s ease;
-        }
-
-        /* Card-like sections */
-        .section-card {
-            background: linear-gradient(145deg, #ffffff, #f0f0f0);
-            border-radius: 20px;
-            padding: 25px;
-            margin: 20px 0;
+            transform: translateY(-1px) !important;
+            background: var(--accent-primary)25 !important;
+            border-color: var(--accent-primary)50 !important;
             box-shadow: 
-                20px 20px 60px #d9d9d9,
-                -20px -20px 60px #ffffff;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+                0 8px 20px var(--accent-primary)20,
+                inset 0 1px 0 var(--accent-primary)30 !important;
         }
 
-        /* Title styling */
+        /* Professional input fields */
+        .stTextInput > div > div > input,
+        .stNumberInput > div > div > input {
+            background: var(--glass-bg) !important;
+            backdrop-filter: blur(16px) saturate(180%) !important;
+            border: 1px solid var(--glass-border) !important;
+            border-radius: 8px !important;
+            padding: 10px 12px !important;
+            transition: all 0.3s ease !important;
+            box-shadow: 
+                0 2px 8px var(--glass-shadow),
+                inset 0 1px 0 var(--glass-border) !important;
+            color: var(--text-primary) !important;
+            font-size: 14px !important;
+        }
+
+        .stTextInput > div > div > input:focus,
+        .stNumberInput > div > div > input:focus {
+            background: var(--surface-hover) !important;
+            border-color: var(--accent-primary)60 !important;
+            box-shadow: 
+                0 0 0 2px var(--accent-primary)20,
+                0 4px 12px var(--accent-primary)15,
+                inset 0 1px 0 var(--glass-border) !important;
+            outline: none !important;
+        }
+
+        /* Professional select boxes */
+        .stSelectbox > div > div > div {
+            background: var(--glass-bg) !important;
+            backdrop-filter: blur(16px) saturate(180%) !important;
+            border: 1px solid var(--glass-border) !important;
+            border-radius: 8px !important;
+            box-shadow: 
+                0 2px 8px var(--glass-shadow),
+                inset 0 1px 0 var(--glass-border) !important;
+        }
+
+        /* Professional sliders */
+        .stSlider > div > div > div > div {
+            background: var(--glass-bg) !important;
+            backdrop-filter: blur(12px) !important;
+            border-radius: 12px !important;
+            border: 1px solid var(--glass-border) !important;
+        }
+
+        .stSlider > div > div > div > div > div[role="slider"] {
+            background: var(--accent-primary) !important;
+            border: 2px solid white !important;
+            box-shadow: 0 2px 8px var(--accent-primary)40 !important;
+        }
+
+        /* Professional radio buttons */
+        .stRadio > div {
+            background: var(--glass-bg) !important;
+            backdrop-filter: blur(16px) saturate(180%) !important;
+            border-radius: 12px !important;
+            padding: 16px !important;
+            border: 1px solid var(--glass-border) !important;
+            box-shadow: 
+                0 4px 12px var(--glass-shadow),
+                inset 0 1px 0 var(--glass-border) !important;
+        }
+
+        /* Professional section cards */
+        .section-card {
+            background: var(--glass-bg) !important;
+            backdrop-filter: blur(32px) saturate(180%) !important;
+            border-radius: 16px !important;
+            padding: 24px !important;
+            margin: 20px 0 !important;
+            border: 1px solid var(--glass-border) !important;
+            box-shadow: 
+                0 12px 32px var(--glass-shadow),
+                inset 0 1px 0 var(--glass-border) !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        }
+
+        .section-card:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 
+                0 16px 40px var(--glass-shadow),
+                inset 0 1px 0 var(--glass-border) !important;
+        }
+
+        /* Professional title styling */
         h1 {
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: 800;
-            text-align: center;
-            font-size: 3rem;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)) !important;
+            -webkit-background-clip: text !important;
+            -webkit-text-fill-color: transparent !important;
+            background-clip: text !important;
+            font-weight: 800 !important;
+            text-align: center !important;
+            font-size: 3rem !important;
+            margin-bottom: 8px !important;
+            letter-spacing: -0.025em !important;
+            line-height: 1.1 !important;
         }
 
-        /* Subheader styling */
+        /* Professional subheaders */
         .stApp h2, .stApp h3 {
-            background: linear-gradient(45deg, #11998e, #38ef7d);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: 600;
-            margin-top: 30px;
+            color: var(--text-primary) !important;
+            font-weight: 700 !important;
+            margin-top: 24px !important;
+            margin-bottom: 12px !important;
+            position: relative !important;
+            font-size: 1.5rem !important;
         }
 
-        /* Success message styling */
+        .stApp h2::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 32px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 1px;
+        }
+
+        /* Professional alerts */
+        .stAlert {
+            background: var(--glass-bg) !important;
+            backdrop-filter: blur(20px) saturate(180%) !important;
+            border: 1px solid var(--glass-border) !important;
+            border-radius: 12px !important;
+            box-shadow: 
+                0 8px 24px var(--glass-shadow),
+                inset 0 1px 0 var(--glass-border) !important;
+            color: var(--text-primary) !important;
+        }
+
         .stSuccess {
-            background: linear-gradient(90deg, #56ab2f, #a8edea);
-            border-radius: 15px;
-            padding: 15px;
-            border: none;
+            background: var(--success)10 !important;
+            border-color: var(--success)30 !important;
+            color: var(--success) !important;
         }
 
-        /* Metric styling */
+        .stInfo {
+            background: var(--accent-primary)10 !important;
+            border-color: var(--accent-primary)30 !important;
+            color: var(--accent-primary) !important;
+        }
+
+        .stError {
+            background: var(--error)10 !important;
+            border-color: var(--error)30 !important;
+            color: var(--error) !important;
+        }
+
+        .stWarning {
+            background: var(--warning)10 !important;
+            border-color: var(--warning)30 !important;
+            color: var(--warning) !important;
+        }
+
+        /* Professional metrics */
         [data-testid="metric-container"] {
-            background: linear-gradient(145deg, #ffffff, #f8f9fa);
-            border: 2px solid transparent;
-            border-radius: 15px;
-            padding: 15px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
+            background: var(--glass-bg) !important;
+            backdrop-filter: blur(20px) saturate(180%) !important;
+            border: 1px solid var(--glass-border) !important;
+            border-radius: 12px !important;
+            padding: 16px !important;
+            box-shadow: 
+                0 8px 20px var(--glass-shadow),
+                inset 0 1px 0 var(--glass-border) !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
         }
 
         [data-testid="metric-container"]:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px) scale(1.01) !important;
+            box-shadow: 
+                0 12px 28px var(--glass-shadow),
+                inset 0 1px 0 var(--glass-border) !important;
         }
 
-        /* Table styling */
-        table {
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        [data-testid="metric-container"] > div:first-child {
+            color: var(--text-secondary) !important;
+            font-size: 0.875rem !important;
+            font-weight: 500 !important;
         }
 
-        /* Sidebar header styling */
-        .css-1d391kg h2 {
-            color: white;
-            text-align: center;
-            font-weight: 700;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        [data-testid="metric-container"] > div:last-child {
+            color: var(--text-primary) !important;
+            font-size: 1.5rem !important;
+            font-weight: 700 !important;
         }
 
-        /* Sidebar text styling */
+        /* Professional tables */
+        .stDataFrame {
+            background: var(--glass-bg) !important;
+            backdrop-filter: blur(20px) saturate(180%) !important;
+            border-radius: 12px !important;
+            overflow: hidden !important;
+            box-shadow: 
+                0 8px 24px var(--glass-shadow),
+                inset 0 1px 0 var(--glass-border) !important;
+            border: 1px solid var(--glass-border) !important;
+        }
+
+        /* Professional sidebar labels */
         .css-1d391kg .stTextInput label,
         .css-1d391kg .stSlider label,
-        .css-1d391kg .stRadio label {
-            color: white !important;
-            font-weight: 500;
+        .css-1d391kg .stRadio label,
+        .css-1d391kg .stSelectbox label,
+        .css-1d391kg .stNumberInput label {
+            color: var(--text-secondary) !important;
+            font-weight: 500 !important;
+            font-size: 0.875rem !important;
+            margin-bottom: 4px !important;
         }
 
-        /* Code block styling */
+        /* Professional sidebar header */
+        .css-1d391kg h2 {
+            color: var(--text-primary) !important;
+            text-align: center !important;
+            font-weight: 700 !important;
+            margin-bottom: 20px !important;
+            font-size: 1.25rem !important;
+        }
+
+        /* Professional code blocks */
         .stCode {
-            border-radius: 15px;
-            border: 2px solid #e0e0e0;
-            background: linear-gradient(145deg, #f8f9fa, #ffffff);
+            background: var(--glass-bg) !important;
+            backdrop-filter: blur(16px) saturate(180%) !important;
+            border: 1px solid var(--glass-border) !important;
+            border-radius: 8px !important;
+            box-shadow: 
+                0 4px 12px var(--glass-shadow),
+                inset 0 1px 0 var(--glass-border) !important;
+            color: var(--text-primary) !important;
+            font-family: 'SF Mono', 'Monaco', 'Cascadia Code', monospace !important;
         }
 
-        /* Animation for loading */
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.7; }
-            100% { opacity: 1; }
+        /* Professional spinner */
+        .stSpinner > div {
+            background: var(--glass-bg) !important;
+            backdrop-filter: blur(20px) saturate(180%) !important;
+            border-radius: 12px !important;
+            border: 1px solid var(--glass-border) !important;
+            box-shadow: 
+                0 8px 24px var(--glass-shadow),
+                inset 0 1px 0 var(--glass-border) !important;
+        }
+
+        /* Professional plotly charts */
+        .js-plotly-plot {
+            background: var(--glass-bg) !important;
+            backdrop-filter: blur(24px) saturate(180%) !important;
+            border-radius: 16px !important;
+            border: 1px solid var(--glass-border) !important;
+            box-shadow: 
+                0 12px 32px var(--glass-shadow),
+                inset 0 1px 0 var(--glass-border) !important;
+            padding: 12px !important;
+        }
+
+        /* Professional dividers */
+        hr {
+            border: none !important;
+            height: 1px !important;
+            background: linear-gradient(90deg, transparent, var(--glass-border), transparent) !important;
+            margin: 20px 0 !important;
+        }
+
+        /* Professional scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--glass-bg);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--glass-border);
+            border-radius: 3px;
+            backdrop-filter: blur(8px);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-primary)40;
+        }
+
+        /* Professional focus states */
+        *:focus-visible {
+            outline: 2px solid var(--accent-primary)60 !important;
+            outline-offset: 2px !important;
+            border-radius: 4px !important;
+        }
+
+        /* Professional loading animation */
+        @keyframes professional-pulse {
+            0%, 100% { 
+                opacity: 0.8;
+                transform: scale(1);
+            }
+            50% { 
+                opacity: 1;
+                transform: scale(1.01);
+            }
         }
 
         .loading {
-            animation: pulse 2s ease-in-out infinite;
+            animation: professional-pulse 2s ease-in-out infinite;
         }
 
         /* Mobile responsiveness */
         @media (max-width: 768px) {
             .block-container {
-                margin: 0.5rem;
-                border-radius: 15px;
+                margin: 0.5rem !important;
+                padding: 1.5rem 1rem !important;
+                border-radius: 12px !important;
             }
 
             h1 {
-                font-size: 2rem;
+                font-size: 2rem !important;
             }
+
+            .section-card {
+                padding: 16px !important;
+                margin: 12px 0 !important;
+                border-radius: 12px !important;
+            }
+
+            [data-testid="metric-container"] {
+                padding: 12px !important;
+                border-radius: 10px !important;
+            }
+        }
+
+        /* Professional typography hierarchy */
+        .stMarkdown p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-size: 0.9rem;
+        }
+
+        .stMarkdown strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* Professional status indicators */
+        .status-optimal {
+            color: var(--success) !important;
+            font-weight: 600 !important;
+        }
+
+        .status-infeasible {
+            color: var(--error) !important;
+            font-weight: 600 !important;
+        }
+
+        .status-unbounded {
+            color: var(--warning) !important;
+            font-weight: 600 !important;
+        }
+
+        /* Enhanced interaction feedback */
+        button:active,
+        input:active,
+        select:active {
+            transform: scale(0.98) !important;
+        }
+
+        /* Professional tooltip styling */
+        [data-baseweb="tooltip"] {
+            background: var(--glass-bg) !important;
+            backdrop-filter: blur(20px) saturate(180%) !important;
+            border: 1px solid var(--glass-border) !important;
+            border-radius: 8px !important;
+            box-shadow: 
+                0 8px 24px var(--glass-shadow),
+                inset 0 1px 0 var(--glass-border) !important;
+            color: var(--text-primary) !important;
+            font-size: 0.85rem !important;
         }
     </style>
 """, unsafe_allow_html=True)
-
 
 # ---------- Functions ---------- #
 def get_user_input():
